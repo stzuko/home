@@ -6,14 +6,12 @@ import Art from './Art'
 import Contact from './Contact'
 
 const Main = () => (
-  <main>
-    <Switch>
-      <Route exact path='/' component={Home}/>
-      <Route exact path='/work' component={Work}/>
-      <Route exact path='/art' component={Art}/>
-      <Route exact path='/contact' component={Contact}/>
-    </Switch>
-  </main>
+  <Switch>
+    <Route exact path='/home' component={Home}/>
+    <Route exact path='/work' component={Work}/>
+    <Route exact path='/art' component={Art}/>
+    <Route exact path='/contact' component={Contact}/>
+  </Switch>
 )
 
 export default Main

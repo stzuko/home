@@ -7,7 +7,7 @@ const Header = () => (
   <header>
     <div className='container elegant-color-dark'>
       <div className='row'>
-        <Link to='/'>
+        <Link to='/home' className='center-link'>
           <img className='rounded-circle' src="sydney.jpg" />
         </Link>
       </div>

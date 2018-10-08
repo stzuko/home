@@ -2,7 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 const Home = () => (
-  <home>
     <div className='container elegant-color-dark'>
       <div className='row text-center'>
         <div className='col-sm'>
@@ -21,13 +20,7 @@ const Home = () => (
           </div>
         </div>
       </div>
-      <footer className="page-footer font-small elegant-color header">
-        <div className="footer-copyright text-center py-3">© 2018 Copyright:
-          <a href="https://github.com/stzuko">Syd Strzempko</a>
-        </div>
-      </footer>
     </div>
-  </home>
 )
 
 export default Home
