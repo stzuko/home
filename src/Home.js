@@ -5,19 +5,25 @@ const Home = () => (
     <div className='container elegant-color-dark'>
       <div className='row text-center'>
         <div className='col-sm'>
-          <div className="jumbotron elegant-color header" id="work">
-            <Link to='/work'>Work</Link>
-          </div>
+          <Link to='/work'>
+            <div className="jumbotron elegant-color header" id="work">
+              Work
+            </div>
+          </Link>
         </div>
         <div className='col-sm'>
-          <div className="jumbotron elegant-color header" id="art">
-            <Link to='/art'>Art</Link>
-          </div>
+          <Link to='/art'>
+            <div className="jumbotron elegant-color header" id="art">
+              Art
+            </div>
+          </Link>
         </div>
         <div className='col-sm'>
-          <div className="jumbotron elegant-color header" id="contact">
-            <Link to='/contact'>Contact</Link>
-          </div>
+          <Link to='/contact'>
+            <div className="jumbotron elegant-color header" id="contact">
+              Contact
+            </div>
+          </Link>
         </div>
       </div>
     </div>

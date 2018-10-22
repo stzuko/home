@@ -15,6 +15,10 @@ body {
 #contact {
   background: center no-repeat url('./img/contact.jpg');
 }
+.work-img {
+  margin: 0 auto;
+  width: 80%;
+}
 .rounded-circle {
   margin: 5px auto 0px;
   max-width: 100px;
