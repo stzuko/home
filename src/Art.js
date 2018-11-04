@@ -2,7 +2,9 @@ import React from 'react'
 
 const Art = () => (
   <art>
-    Art page!
+    <div className='container elegant-color-dark'>
+      Coming Soon
+    </div>
   </art>
 )
 

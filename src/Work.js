@@ -21,11 +21,10 @@ function AllJobs(){
 }
 
 function SingleJob(props){
-  console.log(props.key);
   return (
     <div className='container elegant-color-dark'>
       <Title role={props.props.text.role} project={props.props.text.project} org={props.props.text.org} />
-      <Image path={props.props.img.path} alt={props.props.img.alt} />
+      <div className='container img-container'><Image path={props.props.img.path} alt={props.props.img.alt} /></div>
       <Collapsible desc={props.props.text.desc} /> 
     </div>
   )
@@ -54,7 +53,7 @@ function Title(props){
 }
 
 function Image(props){
-  return <img src={props.path} alt={props.alt} className="work-img"/>
+  return <img src={window.location.origin + props.path} alt={props.alt} className="work-img"/>
 }
 
 function Collapsible(props){

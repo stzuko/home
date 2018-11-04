@@ -6,6 +6,9 @@ body {
   color:white;
   text-decoration:none;
 }
+.padded-bottom {
+  padding-bottom: 10px;
+}
 #work {
   background: center no-repeat url('./img/work.jpg') ;
 }
@@ -15,9 +18,12 @@ body {
 #contact {
   background: center no-repeat url('./img/contact.jpg');
 }
-.work-img {
-  margin: 0 auto;
+.img-container {
   width: 80%;
+  margin: 0 auto;
+}
+.work-img {
+  width: 100%;
 }
 .rounded-circle {
   margin: 5px auto 0px;
@@ -27,6 +33,10 @@ body {
 }
 .center-link {
   margin: 0 auto;
+}
+.icon-wrapper > * {
+  font-size: 20px;
+  margin: 0 5px;
 }
 a {
   color: #ffffff;

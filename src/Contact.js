@@ -3,15 +3,23 @@ import React from 'react'
 const Contact = () => (
   <contact>
     <div className='container elegant-color-dark'>
-      <div className='row text-right'>
+      <div className='row text-center padded-bottom'>
         <div className='col-sm'>
           <h1>Contact</h1>
-          <br />
-          sto.lat.syd@gmail.com
-	  <br />
-	  https://github.com/stzuko
-          <br />
-          (508)-361-3887
+	  <span class='text-center icon-wrapper'>
+	    <a href="https://github.com/stzuko">
+	      <i class="fab fa-github-square"></i>
+	    </a>
+	    <a href="https://www.linkedin.com/in/sydney-strzempko-99329abb/">
+	      <i class="fab fa-linkedin"></i>
+	    </a>
+            <a href="mailto:sto.lat.syd@gmail.com">
+	      <i class="fas fa-envelope-square"></i>
+	    </a>
+	    <a href="tel:+15083613887">    
+	      <i class="fas fa-phone-square"></i>
+            </a>
+	  </span>
         </div>
       </div>
     </div>
