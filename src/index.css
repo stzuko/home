@@ -25,6 +25,13 @@ body {
 .work-img {
   width: 100%;
 }
+.show-more {
+  background-color: rgba(0,0,0,0);
+  border: none;
+  margin-bottom: 5px;
+  color: #e7e7e7;
+  font-size: 30px;
+}
 .rounded-circle {
   margin: 5px auto 0px;
   max-width: 100px;

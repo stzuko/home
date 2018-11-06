@@ -12,12 +12,16 @@ export default class SingleJob extends React.Component {
                 this.setState({expanded: (this.state.expanded? false : true)})
         }
 
+	computeButton(){
+		return (this.state.expanded? <i className="fas fa-caret-up"></i> : <i className="fas fa-caret-down"></i>)
+	}
+
         render() {
           return (
                 <div className='container elegant-color-dark text-center'>
                   <Image src={this.props.job.img} />
                   <Title title={this.props.job.title} project={this.props.job.project} />
-                  <button onClick={this.toggleCollapse.bind(this)}>Click me</button>
+                  <button className='show-more' onClick={this.toggleCollapse.bind(this)}>{this.computeButton()}</button>
                   {this.state.expanded && <Collapsible text={this.props.job.desc} link={this.props.job.link} />}
                 </div>
           );
@@ -49,15 +53,18 @@ function Image(props){
   )
 }
 
-// Needs link
 function Collapsible(props){
+  let built = [];
+  for (let i=0;i<props.text.length;i++){
+	built.push(<li>{props.text[i]}</li>);
+  }
   return (
     <div className="container">
       <div className="row text-center">
         <div className="col">
-          <a href={props.link}><i class="fas fa-link"></i></a>
-	  <hr />
-          {props.text}
+        	<a href={props.link}><i class="fas fa-link"></i></a>
+			<br />
+	  		<ul>{built}</ul>
         </div>
       </div>
     </div>
