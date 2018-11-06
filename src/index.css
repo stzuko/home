@@ -18,6 +18,10 @@ body {
 #contact {
   background: center no-repeat url('./img/contact.jpg');
 }
+.job-wrapper {
+  border: 5px inset #616161;
+  padding-top: 15px;
+}
 .img-container {
   width: 80%;
   margin: 0 auto;

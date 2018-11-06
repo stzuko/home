@@ -18,10 +18,10 @@ export default class SingleJob extends React.Component {
 
         render() {
           return (
-                <div className='container elegant-color-dark text-center'>
+                <div className='container elegant-color-dark job-wrapper text-center' >
+                  <Title title={this.props.job.title} project={this.props.job.project}/>
                   <Image src={this.props.job.img} />
-                  <Title title={this.props.job.title} project={this.props.job.project} />
-                  <button className='show-more' onClick={this.toggleCollapse.bind(this)}>{this.computeButton()}</button>
+		  <button className='show-more' onClick={this.toggleCollapse.bind(this)}>{this.computeButton()}</button>
                   {this.state.expanded && <Collapsible text={this.props.job.desc} link={this.props.job.link} />}
                 </div>
           );
@@ -48,7 +48,7 @@ function Title(props){
 function Image(props){
   return (
           <div className='container img-container'>
-                <img src={'/img/work/' + props.src} alt="related image" className="work-img"/>
+                <img src={'/home/img/work/' + props.src} alt="related image" className="work-img"/>
           </div>
   )
 }
@@ -60,11 +60,10 @@ function Collapsible(props){
   }
   return (
     <div className="container">
-      <div className="row text-center">
-        <div className="col">
+      <div className="row">
+        <div className="col text-center">
         	<a href={props.link}><i class="fas fa-link"></i></a>
-			<br />
-	  		<ul>{built}</ul>
+		<ul className="text-left">{built}</ul>
         </div>
       </div>
     </div>
