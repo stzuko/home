@@ -1,35 +1,51 @@
 import React from 'react'
 
 export default class Work extends React.Component {
-	render() {
-		return ( <AllJobs /> );
+	
+	constructor() {
+		super();
+		this.state = {
+			jobs: [
+				{'id': 0, 'title':'Full Stack Developer', 'project':'LobbyView Database','link':'https://www.lobbyview.org','img':'lobbyview.png','desc':''},
+				{'id': 1, 'title':'Open Source Developer', 'project':'Color Commons Installation','link':'http://www.newamericanpublicart.com/color-commons-2017','img':'ccommons.png','desc':''},
+				{'id': 2, 'title':null, 'project':'Neural Network','link':'https://github.com/stzuko/neural-network','img':'nn.png','desc':''},
+				{'id': 3, 'title':null, 'project':'Classifier Comparison','link':'https://github.com/stzuko/IBK-v-J48','img':'knn.png','desc':''},
+				{'id': 4, 'title':null, 'project':'Universal Machine','link':'https://github.com/stzuko/universal-machine','img':'um.png','desc':''},
+			]
+		}
+	}
+	
+	render() {		
+		let built = [];
+		for (let i=0;i<5;i++){
+			built.push(<SingleJob job={this.state.jobs[i]} key={this.state.jobs[i]['id']} />);
+		}
+		return <div className='container elegant-color-dark'>{built}</div>
 	}
 }
 
-var Jobs = [
-	{'src':{'text':{'role':'Full Stack Developer','project':'LobbyView','org':'MIT Dept Political Science','desc':'xxx'},'img':{'path':'/img/work/lobbyview.png','alt':'screenshot of index page of www.lobbyview.org'}},'id':0},
-	{'src':{'text':{'role':'Open Source Developer','project':'Color Commons','org':'New American Public Art','desc':'xxx'},'img':{'path':'/img/work/ccommons.png','alt':'screenshot of color commons page at www.newamericanpublicart.com'}},'id':1},
-	{'src':{'text':{'role':'A','project':'B','org':'','desc':'C'},'img':{'path':'/img/work/nn.png','alt':'a bar graph showing performance of a neural network'}},'id':2},
-	{'src':{'text':{'role':'A','project':'B','org':'','desc':'C'},'img':{'path':'/img/work/knn.png','alt':'a bar graph showing performance of two ML classifiers'}},'id':3},
-	{'src':{'text':{'role':'A','project':'B','org':'','desc':'C'},'img':{'path':'/img/work/um.png','alt':'a screenshot of a readme for the UM code'}},'id':4},
-];
-
-function AllJobs(){
-  let built = [];
-  for (let i=0;i<5;i++){
-    built.push(<SingleJob props={Jobs[i]['src']} key={Jobs[i]['id']} />);
-  }
-  return <div className='container elegant-color-dark'>{built}</div>
-}
-
-function SingleJob(props){
-  return (
-    <div className='container elegant-color-dark'>
-      <Title role={props.props.text.role} project={props.props.text.project} org={props.props.text.org} />
-      <div className='container img-container'><Image path={props.props.img.path} alt={props.props.img.alt} /></div>
-      <Collapsible desc={props.props.text.desc} /> 
-    </div>
-  )
+export default class SingleJob extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			expanded: false;	
+		}
+	}
+			
+	toggleCollapse(){
+		this.setState({expanded: (this.state.expanded? false : true)})
+	}
+			
+	render() {
+	  return (
+		<div className='container elegant-color-dark'>
+		  <Image src={this.props.job.img} />
+		  <Title title={this.props.job.title} project={this.props.job.project} />
+		  <button onClick={this.toggleCollapse.bind(this)}>Click me</button>
+		  {expanded && <Collapsible text={this.props.job.desc} link={this.props.job.link} />}
+		</div>
+	  );
+	}
 }
 
 function Title(props){
@@ -37,7 +53,7 @@ function Title(props){
     <div className="container">
       <div className="row text-center">
         <div className="col">
-          <h1>{props.role}</h1>
+          <h1>{props.title}</h1>
         </div>
       </div>
       <div className="row text-center">
@@ -45,19 +61,19 @@ function Title(props){
           <h2>{props.project}</h2>
         </div>
       </div>
-      <div className="row text-center">
-        <div className="col">
-          <h3>{props.org}</h3>
-        </div>
-      </div>
     </div>
   )
 }
 
 function Image(props){
-  return <img src={window.location.origin + props.path} alt={props.alt} className="work-img"/>
+  return (
+	  <div className='container img-container'>
+	  	<img src={window.location.origin + props.path} alt="related image" className="work-img"/>
+	  </div>
+  )
 }
 
+// Needs link
 function Collapsible(props){
   return (
     <div className="container">
