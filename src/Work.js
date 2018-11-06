@@ -1,8 +1,10 @@
 import React from 'react'
 
-const Work = () => (
-  <AllJobs />
-)
+export default class Work extends React.Component {
+	render() {
+		return ( <AllJobs /> );
+	}
+}
 
 var Jobs = [
 	{'src':{'text':{'role':'Full Stack Developer','project':'LobbyView','org':'MIT Dept Political Science','desc':'xxx'},'img':{'path':'/img/work/lobbyview.png','alt':'screenshot of index page of www.lobbyview.org'}},'id':0},
@@ -67,5 +69,3 @@ function Collapsible(props){
     </div>
   )
 }
-
-export default Work
