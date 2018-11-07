@@ -9,6 +9,13 @@ export default class Art extends React.Component {
 		}
 	}
 
+	componentDidMount() {
+		for (let i=this.state.art;i>0;i--) {
+			const img = document.createElement('img');
+			img.src = this.createValidLink(i);
+		}
+	}
+	
 	createValidLink(str){
 		return '/img/art/' + ('0000'+str).slice(-4) + '.jpg';	
 	}
@@ -30,14 +37,15 @@ export default class Art extends React.Component {
 	}
 
 	render() {	
+		this.componentDidMount();
 		return ( 
     		<div className='container elegant-color-dark'>
       			<div className='row button-span'>
 					<button onClick={this.showPrev.bind(this)} className="show-more">
-						<i class="fas fa-caret-left"></i>
+						<i className="fas fa-caret-left"></i>
 					</button>
 					<button onClick={this.showNext.bind(this)} className="show-more">
-						<i class="fas fa-caret-right"></i>
+						<i className="fas fa-caret-right"></i>
 					</button>	
 				</div>
 				<div className='row'>
