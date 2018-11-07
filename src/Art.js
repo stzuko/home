@@ -10,7 +10,7 @@ export default class Art extends React.Component {
 	}
 
 	createValidLink(str){
-		return '/home/img/art/' + ('0000'+str).slice(-4) + '.jpg';	
+		return '/img/art/' + ('0000'+str).slice(-4) + '.jpg';	
 	}
 
 	showNext(){

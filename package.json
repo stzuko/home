@@ -2,7 +2,7 @@
   "name": "website",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://stzuko.github.io/home",
+  "homepage": "http://stzuko.github.io/",
   "dependencies": {
     "react": "^16.5.1",
     "react-dom": "^16.5.1",

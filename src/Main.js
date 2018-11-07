@@ -9,7 +9,7 @@ export default class Main extends React.Component {
 	render() {
 		return (
 		<Switch>
-		    <Route exact path='/home' component={Home}/>
+		    <Route exact path='/' component={Home}/>
 		    <Route exact path='/work' component={Work}/>
 		    <Route exact path='/art' component={Art}/>
     		<Route exact path='/contact' component={Contact}/>
