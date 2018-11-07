@@ -26,6 +26,17 @@ body {
   width: 80%;
   margin: 0 auto;
 }
+.button-span {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+}
+.button-span > * {
+  padding: 0 5px;
+}
+.art-img {
+  width: 100%;
+}
 .work-img {
   width: 100%;
 }
