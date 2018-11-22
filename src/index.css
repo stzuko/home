@@ -26,6 +26,10 @@ body {
   width: 80%;
   margin: 0 auto;
 }
+#drawable {
+  border: 2px solid red;
+  margin: 0 auto;
+}
 .button-span {
   display: flex;
   flex-flow: row nowrap;

@@ -5,39 +5,68 @@ export default class Canvas extends React.Component {
 	constructor(){
 		super();
 		this.state = {
-			ctx:null,
+			context:null,
+			top_:0,
+			left:0,
 			x: 0,
-			y: 0
+			y: 0,
 		}
+		this.ctx = React.createRef();
+		this.prepctx = this.prepctx.bind(this);
+		this.resizectx = this.resizectx.bind(this);
+	}
+
+	componentDidMount() {
+    		window.addEventListener('load', this.prepctx);
+		window.addEventListener('resize',this.resizectx);
+ 	}
+
+	resizectx(){
+		let rect = this.ctx.current.getBoundingClientRect();
+                this.setState({top_:rect.top,left:rect.left});
 	}
 	
 	prepctx() {
-		let temp = document.getElementById("drawable");
-		temp = temp.getContext("2d");
-		this.setState({ctx:temp});
+		this.resizectx();
+		let temp = this.ctx.current.getContext("2d");
+		this.setState({context:temp});
 	}
 	
 	draw(e) {
 		if (e.buttons !== 1) return; // if mouse is pressed.....
-
-		this.state.ctx.beginPath(); // begin the drawing path
-		this.state.ctx.lineWidth = 20; // width of line
-		this.state.ctx.lineCap = "round"; // rounded end cap
-		this.state.ctx.strokeStyle = '#000000'; // hex color of line
-		this.state.ctx.moveTo(this.state.x, this.state.y); // from position
+		this.state.context.beginPath(); // begin the drawing path
+		this.state.context.lineWidth = 30; // width of line
+		this.state.context.lineCap = "round"; // rounded end cap
+		this.state.context.strokeStyle = '#ffffff'; // hex color of line
+		this.state.context.moveTo(this.state.x, this.state.y); // from position
 		this.setPosition(e);
-		this.state.ctx.lineTo(this.state.x, this.state.y); // to position
-		this.state.ctx.stroke(); // draw it!
+		this.state.context.lineTo(this.state.x, this.state.y); // to position
+		this.state.context.stroke(); // draw it!
 	}
 	
 	setPosition(e) {
-		this.setState({x:e.clientX,y:e.clientY});
+		this.setState({x:e.clientX-this.state.left,y:e.clientY-this.state.top_});
+	}
+
+	loadCanvas() {
+		let raw = this.state.context.getImageData(0,0,280,280);
+		console.log(raw);
 	}
 	
 	render() {
-		this.prepctx();
 		return (
-			<canvas id="drawable" onMouseMove={this.draw.bind(this)} onMouseDown={this.setPosition.bind(this)} onMouseEnter={this.setPosition.bind(this)}></canvas>
+			<div className='container elegant-color-dark'>
+				<div className="row">
+					<div className="col">				
+						<canvas id="drawable" width={280} height={280} ref={this.ctx} onMouseMove={this.draw.bind(this)} onMouseDown={this.setPosition.bind(this)} onMouseEnter={this.setPosition.bind(this)}></canvas>
+					</div>
+				</div>
+				<div className="row">
+					<div className="col">
+						<button onClick={this.loadCanvas.bind(this)}>Submit</button>
+					</div>
+				</div>
+			</div>
 		) 
 	}
 }

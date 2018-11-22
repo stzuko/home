@@ -4,6 +4,7 @@ import Home from './Home'
 import Work from './Work'
 import Art from './Art'
 import Contact from './Contact'
+import Draw from './Draw'
 
 export default class Main extends React.Component {
 	render() {
@@ -13,6 +14,7 @@ export default class Main extends React.Component {
 		    <Route exact path='/work' component={Work}/>
 		    <Route exact path='/art' component={Art}/>
     		<Route exact path='/contact' component={Contact}/>
+			<Route exact path='/draw' component={Draw}/>
   		</Switch>
 		);
 	}

@@ -1,4 +1,5 @@
 import React from 'react'
+import Canvas from './Canvas'
 
 export default class Draw extends React.Component {
 	
@@ -8,15 +9,8 @@ export default class Draw extends React.Component {
 	}
 	
 	render() {
-		this.renderCanvas();
 		return (
-			<draw>
-				<div className='container elegant-color-dark'>
-      				<div className="row">
-						<Canvas />
-					</div>
-				</div>
-			</draw>
+			<Canvas />
 		)
 	}
 }
