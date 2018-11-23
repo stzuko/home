@@ -1,10 +1,12 @@
 import React from 'react'
+import Tensor from './Tensor'
 
 export default class Canvas extends React.Component {
 
 	constructor(){
 		super();
 		this.state = {
+			data:null,
 			context:null,
 			top_:0,
 			left:0,
@@ -17,7 +19,7 @@ export default class Canvas extends React.Component {
 	}
 
 	componentDidMount() {
-    		window.addEventListener('load', this.prepctx);
+    	window.addEventListener('load', this.prepctx);
 		window.addEventListener('resize',this.resizectx);
  	}
 
@@ -85,6 +87,7 @@ export default class Canvas extends React.Component {
 	submitData() {
 		console.log("submitting data");
 		let data = this.loadCanvas();
+		this.setState({data:data});
 	}
 
 	render() {
@@ -100,6 +103,9 @@ export default class Canvas extends React.Component {
 						<button onClick={this.clearCanvas.bind(this)}>Clear</button>
 						<button onClick={this.submitData.bind(this)}>Submit</button>
 					</div>
+				</div>
+				<div className="row">
+					<Tensor data={this.state.data}/>
 				</div>
 			</div>
 		) 
