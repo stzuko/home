@@ -80,7 +80,8 @@ export default class Canvas extends React.Component {
 			chunks = chunks.map(x => x>=50? 1:0);
 			ret = ret.concat(chunks);
 		}	
-		ret = Uint8ClampedArray.from(ret);
+		//ret = Uint8ClampedArray.from(ret);
+		ret = Uint8Array.from(ret);
 		return ret;	
 	}
 	

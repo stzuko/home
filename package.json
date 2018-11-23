@@ -4,6 +4,8 @@
   "private": true,
   "homepage": "http://stzuko.github.io",
   "dependencies": {
+    "@tensorflow/tfjs": "^0.13.5",
+    "@tensorflow/tfjs-vis": "^0.3.0",
     "react": "^16.5.1",
     "react-dom": "^16.5.1",
     "react-router-dom": "^4.3.1",
