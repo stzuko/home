@@ -40,17 +40,26 @@ export default class Art extends React.Component {
 		this.componentDidMount();
 		return ( 
     		<div className='container elegant-color-dark'>
-      			<div className='row button-span'>
-					<button onClick={this.showPrev.bind(this)} className="show-more">
-						<i className="fas fa-caret-left"></i>
-					</button>
-					<button onClick={this.showNext.bind(this)} className="show-more">
-						<i className="fas fa-caret-right"></i>
-					</button>	
+      			<div className='row'>
+					<div className="col-2 text-center">
+						<button onClick={this.showPrev.bind(this)} className="show-art">
+							<i className="fas fa-caret-left"></i>
+						</button>
+					</div>
+					<div className="col">
+						<a href={this.createValidLink(this.state.pos)} target="_blank"><img src={this.createValidLink(this.state.pos)} className='art-img'></img></a>
+					</div>
+					<div className="col-2 text-center">
+						<button onClick={this.showNext.bind(this)} className="show-more">
+							<i className="fas fa-caret-right"></i>
+						</button>	
+					</div>
 				</div>
 				<div className='row'>
-					<img src={this.createValidLink(this.state.pos)} className='art-img'></img>
-    			</div>
+					<div className='col text-center'>
+						Click to expand image
+					</div>
+				</div>
 			</div>
 		);
 	}
