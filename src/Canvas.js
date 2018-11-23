@@ -70,7 +70,7 @@ export default class Canvas extends React.Component {
 		//			
 		//	}
 		console.log("TODO!");
-		}		
+		//}		
 		
 	}
 	
