@@ -62,18 +62,31 @@ export default class Canvas extends React.Component {
 		})
 		let data3 = data2.map(x => x==0? x : 1);
 		let rows = [];
-		let totals = [];
-		while (data3.length>0) { rows.push(data3.splice(0,280)); }
-		//while (rows.length>0) {
-		//	let strip = rows.splice(0,10);
-		//	for (let i=0;i<10;i++) {
-		//			
-		//	}
-		console.log("TODO!");
-		//}		
+		let ret = [];
 		
+		while (data3.length>0) { rows.push(data3.splice(0,280)); }
+		while (rows.length>0) {
+			let strip = rows.splice(0,10);
+			let chunks = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+			for (let j=0;j<10;j++) {
+				for (let i=0;i<28;i++) {
+					let seg = strip[j].splice(0,10);
+					let sum = seg.reduce((a,b)=>a+b,0);
+					chunks[i] += sum;			
+				}
+			}
+			chunks = chunks.map(x => x>=50? 1:0);
+			ret = ret.concat(chunks);
+		}	
+		ret = Uint8ClampedArray.from(ret);
+		return ret;	
 	}
 	
+	submitData() {
+		console.log("submitting data");
+		let data = this.loadCanvas();
+	}
+
 	render() {
 		return (
 			<div className='container elegant-color-dark'>
@@ -85,7 +98,7 @@ export default class Canvas extends React.Component {
 				<div className="row">
 					<div className="col">
 						<button onClick={this.clearCanvas.bind(this)}>Clear</button>
-						<button onClick={this.loadCanvas.bind(this)}>Submit</button>
+						<button onClick={this.submitData.bind(this)}>Submit</button>
 					</div>
 				</div>
 			</div>
