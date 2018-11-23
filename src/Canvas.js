@@ -48,9 +48,30 @@ export default class Canvas extends React.Component {
 		this.setState({x:e.clientX-this.state.left,y:e.clientY-this.state.top_});
 	}
 
+	clearCanvas(){
+		this.state.context.clearRect(0, 0, 280,280);
+	}
+
 	loadCanvas() {
-		let raw = this.state.context.getImageData(0,0,280,280);
-		console.log(raw);
+		let raw = this.state.context.getImageData(0,0,280,280).data;
+		// courtesy https://stackoverflow.com/a/29862266/10571336
+		let data1 = Array.prototype.slice.call(raw);
+		// courtesy https://stackoverflow.com/a/33483070/10571336
+		let data2 = data1.filter(function(val,i,Arr) {
+			return i % 4 == 0;
+		})
+		let data3 = data2.map(x => x==0? x : 1);
+		let rows = [];
+		let totals = [];
+		while (data3.length>0) { rows.push(data3.splice(0,280)); }
+		//while (rows.length>0) {
+		//	let strip = rows.splice(0,10);
+		//	for (let i=0;i<10;i++) {
+		//			
+		//	}
+		console.log("TODO!");
+		}		
+		
 	}
 	
 	render() {
@@ -63,6 +84,7 @@ export default class Canvas extends React.Component {
 				</div>
 				<div className="row">
 					<div className="col">
+						<button onClick={this.clearCanvas.bind(this)}>Clear</button>
 						<button onClick={this.loadCanvas.bind(this)}>Submit</button>
 					</div>
 				</div>
