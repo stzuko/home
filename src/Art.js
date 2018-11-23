@@ -50,7 +50,7 @@ export default class Art extends React.Component {
 						<a href={this.createValidLink(this.state.pos)} target="_blank"><img src={this.createValidLink(this.state.pos)} className='art-img'></img></a>
 					</div>
 					<div className="col-2 text-center">
-						<button onClick={this.showNext.bind(this)} className="show-more">
+						<button onClick={this.showNext.bind(this)} className="show-art">
 							<i className="fas fa-caret-right"></i>
 						</button>	
 					</div>
