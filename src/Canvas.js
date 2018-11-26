@@ -95,12 +95,12 @@ export default class Canvas extends React.Component {
 		return (
 			<div className='container elegant-color-dark'>
 				<div className="row">
-					<div className="col">				
+					<div className="col text-center">				
 						<canvas id="drawable" width={280} height={280} ref={this.ctx} onMouseMove={this.draw.bind(this)} onMouseDown={this.setPosition.bind(this)} onMouseEnter={this.setPosition.bind(this)}></canvas>
 					</div>
 				</div>
 				<div className="row">
-					<div className="col">
+					<div className="col text-center">
 						<button onClick={this.clearCanvas.bind(this)}>Clear</button>
 						<button onClick={this.submitData.bind(this)}>Submit</button>
 					</div>
