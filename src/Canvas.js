@@ -6,6 +6,7 @@ export default class Canvas extends React.Component {
 	constructor(){
 		super();
 		this.state = {
+			label:null,
 			data:null,
 			context:null,
 			top_:0,
@@ -84,11 +85,18 @@ export default class Canvas extends React.Component {
 		ret = Uint8Array.from(ret);
 		return ret;	
 	}
+
+	saveLabel(event){
+		this.state.label = event.target.value;
+	}
 	
 	submitData() {
-		console.log("submitting data");
-		let data = this.loadCanvas();
-		this.setState({data:data});
+		if (this.state.label==null || this.state.label==''){
+			alert("Please type the number you've drawn in the input below before submitting");
+		} else {
+			let data = this.loadCanvas();
+			this.setState({data:data});
+		}
 	}
 
 	render() {
@@ -101,12 +109,13 @@ export default class Canvas extends React.Component {
 				</div>
 				<div className="row">
 					<div className="col text-center">
+						<input type="text" onChange={this.saveLabel.bind(this)} />
 						<button onClick={this.clearCanvas.bind(this)}>Clear</button>
 						<button onClick={this.submitData.bind(this)}>Submit</button>
 					</div>
 				</div>
 				<div className="row">
-					<Tensor data={this.state.data}/>
+					<Tensor data={this.state.data} label={this.state.label}/>
 				</div>
 			</div>
 		) 
