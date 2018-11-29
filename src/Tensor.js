@@ -6,11 +6,22 @@ export default class Tensor extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			dataloaded:null,
+			data:null,
 			raw:null,
 			pred:null,
 		}
 	}
-
+	
+	componentWillMount(){
+		this.state.dataloaded = false;
+		let data = new MnistData();
+  		await data.load();
+		this.state.data = data;
+		this.state.dataloaded = true;
+		console.log("CWM done");
+	}
+	
 	componentWillReceiveProps(nextProps){
 		if (nextProps.data==null) return;
 		if (this.state.raw==nextProps.data) return;
@@ -30,9 +41,10 @@ export default class Tensor extends React.Component {
 	runLoader() {
 		let xs = tf.tensor4d(this.state.raw,[1,28,28,1]);
 		let ys = tf.tensor2d(this.convertLabel(),[1,10]);
-		let test = {xs,ys};
+		let test = {xs:xs,ys:ys};
 		let model = createModel();
-		console.log("done");
+		await this.train(model,test);
+		console.log("runloader done?");
 	}
 	
 	createModel(){
@@ -86,8 +98,81 @@ export default class Tensor extends React.Component {
 
 		return model;	
 	}
+	
+	train(model,testdata) {
+		// Now that we've defined our model, we will define our optimizer. The
+		// optimizer will be used to optimize our model's weight values during
+		// training so that we can decrease our training loss and increase our
+		// classification accuracy.
+
+		// The learning rate defines the magnitude by which we update our weights each
+		// training step. The higher the value, the faster our loss values converge,
+		// but also the more likely we are to overshoot optimal parameters
+		// when making an update. A learning rate that is too low will take too long
+		// to find optimal (or good enough) weight parameters while a learning rate
+		// that is too high may overshoot optimal parameters. Learning rate is one of
+		// the most important hyperparameters to set correctly. Finding the right
+		// value takes practice and is often best found empirically by trying many
+		// values.
+		const LEARNING_RATE = 0.01;
+
+		// We are using rmsprop as our optimizer.
+		// An optimizer is an iterative method for minimizing an loss function.
+		// It tries to find the minimum of our loss function with respect to the
+		// model's weight parameters.
+		const optimizer = 'rmsprop';
+		// We compile our model by specifying an optimizer, a loss function, and a
+		// list of metrics that we will use for model evaluation. Here we're using a
+		// categorical crossentropy loss, the standard choice for a multi-class
+		// classification problem like MNIST digits.
+		// The categorical crossentropy loss is differentiable and hence makes
+		// model training possible. But it is not amenable to easy interpretation
+		// by a human. This is why we include a "metric", namely accuracy, which is
+		// simply a measure of how many of the examples are classified correctly.
+		// This metric is not differentiable and hence cannot be used as the loss
+		// function of the model.
+		model.compile({
+		optimizer,
+		loss: 'categoricalCrossentropy',
+		metrics: ['accuracy'],
+		});
+		// Batch size is another important hyperparameter. It defines the number of
+		// examples we group together, or batch, between updates to the model's
+		// weights during training. A value that is too low will update weights using
+		// too few examples and will not generalize well. Larger batch sizes require
+		// more memory resources and aren't guaranteed to perform better.
+		const batchSize = 320;
+
+		// Leave out the last 15% of the training data for validation, to monitor
+		// overfitting during training.
+		const validationSplit = 0.15;
+
+		// Get number of training epochs from the UI.
+		const trainEpochs = 3;
+
+		// We'll keep a buffer of loss and accuracy values over time.
+		let trainBatchCount = 0;
+
+		const trainData = this.state.data.getTrainData();
+		
+		const totalNumBatches = Math.ceil(trainData.xs.shape[0] * (1 - validationSplit) / batchSize) * trainEpochs;
+		
+		let valAcc;
+		
+		await model.fit(trainData.xs, trainData.labels, {
+			batchSize,
+			validationSplit,
+			epochs: trainEpochs,
+		});
+		
+		console.log("train done");
+		const testResult = model.evaluate(testData.xs, testData.ys);
+		const testAccPercent = testResult[1].dataSync()[0] * 100;
+		const finalValAccPercent = valAcc * 100;
+		console.log(finalValAccPercent);
+	}
 
         render() {
-		return (<h1>Results</h1>)
+		return (<h1>Results: {this.state.data.loaded}</h1>)
 	}
 }
