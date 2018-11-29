@@ -4,16 +4,21 @@ export default class Art extends React.Component {
 	constructor(){
 		super();
 		this.state = {
-			art: 27,
-			pos: 27
+			art: 29,
+			pos: 29,
+			carousel: null,
 		}
 	}
 
 	componentDidMount() {
+		let list = [];
 		for (let i=this.state.art;i>0;i--) {
 			const img = document.createElement('img');
 			img.src = this.createValidLink(i);
+			let panel = (<div className="art-wrapper"><a href={this.createValidLink(i)} target="_blank"><img src={this.createValidLink(i)}></img></a></div>);
+			list.push(panel);
 		}
+		this.state.carousel = list;
 	}
 	
 	createValidLink(str){
@@ -40,26 +45,16 @@ export default class Art extends React.Component {
 		this.componentDidMount();
 		return ( 
     		<div className='container elegant-color-dark'>
-      			<div className='row'>
-					<div className="col-2 text-center">
-						<button onClick={this.showPrev.bind(this)} className="show-art">
-							<i className="fas fa-caret-left"></i>
-						</button>
-					</div>
-					<div className="col">
-						<a href={this.createValidLink(this.state.pos)} target="_blank"><img src={this.createValidLink(this.state.pos)} className='art-img'></img></a>
-					</div>
-					<div className="col-2 text-center">
-						<button onClick={this.showNext.bind(this)} className="show-art">
-							<i className="fas fa-caret-right"></i>
-						</button>	
-					</div>
-				</div>
-				<div className='row'>
-					<div className='col text-center'>
-						Click to expand image
-					</div>
-				</div>
+                <div className='row'>
+                    <div id="carousel-wrapper" className='col text-center'>
+						{this.state.carousel}                        
+                    </div>
+                </div>
+                <div className='row'>
+                    <div className='col text-center'>
+                        Click to expand image
+                    </div>
+                </div>
 			</div>
 		);
 	}
