@@ -1,6 +1,16 @@
 import React from 'react'
 import * as tf from '@tensorflow/tfjs';
 
+// This is a helper class for loading and managing MNIST data specifically.
+// It is a useful example of how you could create your own data manager class
+// for arbitrary data though. It's worth a look :)
+import {IMAGE_H, IMAGE_W, MnistData} from './data';
+
+// This is a helper class for drawing loss graphs and MNIST images to the
+// window. For the purposes of understanding the machine learning bits, you can
+// largely ignore it
+import * as ui from './ui';
+
 export default class Tensor extends React.Component {
 
 	constructor(props) {
@@ -15,11 +25,17 @@ export default class Tensor extends React.Component {
 	
 	componentWillMount(){
 		this.state.dataloaded = false;
+		this.loadTrainData().then((res)=>{
+			this.state.data=res
+			this.state.dataloaded = true;
+                	console.log("CWM done");
+		});
+	}
+	
+	async loadTrainData() {
 		let data = new MnistData();
-  		await data.load();
-		this.state.data = data;
-		this.state.dataloaded = true;
-		console.log("CWM done");
+                await data.load();
+		return data;
 	}
 	
 	componentWillReceiveProps(nextProps){
@@ -42,9 +58,8 @@ export default class Tensor extends React.Component {
 		let xs = tf.tensor4d(this.state.raw,[1,28,28,1]);
 		let ys = tf.tensor2d(this.convertLabel(),[1,10]);
 		let test = {xs:xs,ys:ys};
-		let model = createModel();
-		await this.train(model,test);
-		console.log("runloader done?");
+		let model = this.createModel();
+		this.train(model,test).then(()=>console.log("Train done?"));
 	}
 	
 	createModel(){
@@ -99,7 +114,7 @@ export default class Tensor extends React.Component {
 		return model;	
 	}
 	
-	train(model,testdata) {
+	async train(model,testdata) {
 		// Now that we've defined our model, we will define our optimizer. The
 		// optimizer will be used to optimize our model's weight values during
 		// training so that we can decrease our training loss and increase our
@@ -153,26 +168,27 @@ export default class Tensor extends React.Component {
 		// We'll keep a buffer of loss and accuracy values over time.
 		let trainBatchCount = 0;
 
-		const trainData = this.state.data.getTrainData();
+		const trainData = await this.state.data.getTrainData();
 		
 		const totalNumBatches = Math.ceil(trainData.xs.shape[0] * (1 - validationSplit) / batchSize) * trainEpochs;
 		
 		let valAcc;
 		
+		console.log("about to model fit");
+		console.log(trainData);
 		await model.fit(trainData.xs, trainData.labels, {
 			batchSize,
 			validationSplit,
 			epochs: trainEpochs,
 		});
-		
 		console.log("train done");
-		const testResult = model.evaluate(testData.xs, testData.ys);
+		const testResult = model.evaluate(testdata.xs, testdata.ys);
 		const testAccPercent = testResult[1].dataSync()[0] * 100;
 		const finalValAccPercent = valAcc * 100;
 		console.log(finalValAccPercent);
 	}
 
         render() {
-		return (<h1>Results: {this.state.data.loaded}</h1>)
+		return (<h1>Results: {this.state.dataloaded}</h1>)
 	}
 }
