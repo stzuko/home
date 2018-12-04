@@ -175,11 +175,21 @@ export default class Tensor extends React.Component {
 		let valAcc;
 		
 		console.log("about to model fit");
-		console.log(trainData);
+		console.log(trainData.xs);
 		await model.fit(trainData.xs, trainData.labels, {
 			batchSize,
 			validationSplit,
 			epochs: trainEpochs,
+			callbacks: {
+      onBatchEnd: async (batch, logs) => {
+        trainBatchCount++;
+        await tf.nextFrame();
+      },
+      onEpochEnd: async (epoch, logs) => {
+        valAcc = logs.val_acc;
+        await tf.nextFrame();
+      }
+    }
 		});
 		console.log("train done");
 		const testResult = model.evaluate(testdata.xs, testdata.ys);

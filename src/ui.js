@@ -15,7 +15,7 @@
  * =============================================================================
  */
 
-import * as tfvis from '@tensorflow/tfjs-vis';
+//import * as tfvis from '@tensorflow/tfjs-vis';
 
 const statusElement = document.getElementById('status');
 const messageElement = document.getElementById('message');
@@ -66,7 +66,7 @@ export function plotLoss(batch, loss, set) {
   const series = set === 'train' ? 0 : 1;
   lossValues[series].push({x: batch, y: loss});
   const lossContainer = document.getElementById('loss-canvas');
-  tfvis.render.linechart(
+  /*tfvis.render.linechart(
       {values: lossValues, series: ['train', 'validation']}, lossContainer, {
         xLabel: 'Batch #',
         yLabel: 'Loss',
@@ -74,6 +74,7 @@ export function plotLoss(batch, loss, set) {
         height: 300,
       });
   lossLabelElement.innerText = `last loss: ${loss.toFixed(3)}`;
+  */
 }
 
 const accuracyValues = [[], []];
@@ -81,7 +82,7 @@ export function plotAccuracy(batch, accuracy, set) {
   const accuracyContainer = document.getElementById('accuracy-canvas');
   const series = set === 'train' ? 0 : 1;
   accuracyValues[series].push({x: batch, y: accuracy});
-  tfvis.render.linechart(
+  /*tfvis.render.linechart(
       {values: accuracyValues, series: ['train', 'validation']},
       accuracyContainer, {
         xLabel: 'Batch #',
@@ -91,6 +92,7 @@ export function plotAccuracy(batch, accuracy, set) {
       });
   accuracyLabelElement.innerText =
       `last accuracy: ${(accuracy * 100).toFixed(1)}%`;
+  */
 }
 
 export function draw(image, canvas) {
