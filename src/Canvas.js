@@ -15,21 +15,19 @@ export default class Canvas extends React.Component {
 			y: 0,
 		}
 		this.ctx = React.createRef();
-		this.prepctx = this.prepctx.bind(this);
-		this.resizectx = this.resizectx.bind(this);
 	}
 
 	componentDidMount() {
-    	window.addEventListener('load', this.prepctx);
+    	this.prepctx();
 		window.addEventListener('resize',this.resizectx);
  	}
 
-	resizectx(){
+	resizectx = () => {
 		let rect = this.ctx.current.getBoundingClientRect();
-                this.setState({top_:rect.top,left:rect.left});
+        this.setState({top_:rect.top,left:rect.left});
 	}
 	
-	prepctx() {
+	prepctx = () => {
 		this.resizectx();
 		let temp = this.ctx.current.getContext("2d");
 		this.setState({context:temp});
@@ -56,17 +54,19 @@ export default class Canvas extends React.Component {
 	}
 
 	loadCanvas() {
+		// 1; Pulls image data from the appropriate size we have determined
 		let raw = this.state.context.getImageData(0,0,280,280).data;
+		// 2; Converts typed array to regular array
 		// courtesy https://stackoverflow.com/a/29862266/10571336
 		let data1 = Array.prototype.slice.call(raw);
+		// 3; Converts the image to single-value number per pixel (assumption: r,g,b,a are all EQ)
 		// courtesy https://stackoverflow.com/a/33483070/10571336
-		let data2 = data1.filter(function(val,i,Arr) {
-			return i % 4 == 0;
-		})
+		let data2 = data1.filter(function(val,i,Arr) { return i % 4 == 0; })
+		// 4; Converts 256/0 to 1/0
 		let data3 = data2.map(x => x==0? x : 1);
+		// 5; Takes 10x10 chunks of the corresponding image, adds them up, then decides if compressed result is 1/0
 		let rows = [];
 		let ret = [];
-		
 		while (data3.length>0) { rows.push(data3.splice(0,280)); }
 		while (rows.length>0) {
 			let strip = rows.splice(0,10);
@@ -95,7 +95,7 @@ export default class Canvas extends React.Component {
 			alert("Please type the number you've drawn in the input below before submitting");
 		} else {
 			let data = this.loadCanvas();
-			this.setState({data:data});
+			this.setState({data});
 		}
 	}
 
