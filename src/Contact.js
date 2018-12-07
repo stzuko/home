@@ -3,7 +3,6 @@ import React from 'react'
 export default class Contact extends React.Component {
 	render() {
 		return (
-		<contact>
 			<div className='container elegant-color-dark'>
       			<div className='row text-center padded-bottom'>
         			<div className='col-sm'>
@@ -25,7 +24,6 @@ export default class Contact extends React.Component {
         			</div>
       			</div>
     		</div>
-		</contact>
 		);
 	}
 }
