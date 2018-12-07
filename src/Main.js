@@ -13,8 +13,8 @@ export default class Main extends React.Component {
 		    <Route exact path='/' component={Home}/>
 		    <Route exact path='/work' component={Work}/>
 		    <Route exact path='/art' component={Art}/>
-    		<Route exact path='/contact' component={Contact}/>
-			<Route exact path='/draw' component={Draw}/>
+    		    <Route exact path='/contact' component={Contact}/>
+	            <Route exact path='/draw' component={Draw}/>
   		</Switch>
 		);
 	}
