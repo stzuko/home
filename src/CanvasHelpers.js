@@ -61,3 +61,10 @@ export function runModelTrain(model,images,labels) {
 	});
 	
 }
+
+convertLabel(pos){
+	let raw = [0,0,0,0,0,0,0,0,0,0];
+	raw[pos] = 1;
+	return raw;
+}
+	
