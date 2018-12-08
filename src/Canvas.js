@@ -1,5 +1,6 @@
 import React from 'react'
 import Tensor from './Tensor'
+import { loadCanvas } from './CanvasHelpers'
 
 export default class Canvas extends React.Component {
 
@@ -27,87 +28,43 @@ export default class Canvas extends React.Component {
 	}
 
 	componentDidMount() {
-	    	this.prepctx();
-		//window.addEventListener('resize',this.resizectx);
+	    this.prepctx();
+		window.addEventListener('resize',this.resizectx);
  	}
 
-	resizectx = () => {
-		let rect = this.ctx.current.getBoundingClientRect();
-        	this.setState({top_:rect.top,left:rect.left});
-	}
-	
 	prepctx = () => {
 		this.resizectx();
-		let temp = this.ctx.current.getContext("2d");
-		this.setState({context:temp});
+		let newcontext = this.ctx.current.getContext("2d");
+		this.setState({canvas.context:newcontext});
 	}
 	
-	draw(e) {
+	resizectx = () => {
+		let rect = this.ctx.current.getBoundingClientRect();
+        this.setState({canvas.y0:rect.top,canvas.x0:rect.left});
+	}
+		
+	setPosition = (e) => { this.setState({canvas.x1:(e.clientX-this.state.canvas.x0),canvas.y1:(e.clientY-this.state.canvas.y0)}); }
+
+	clearCanvas = () => { this.state.canvas.context.clearRect(0, 0, 280,280); }
+
+	saveLabel = (e) => { this.setState({test.label:e.target.value}); }
+	
+	draw = (e) => {
 		if (e.buttons !== 1) return; // if mouse is pressed.....
-		this.state.context.beginPath(); // begin the drawing path
-		this.state.context.lineWidth = 30; // width of line
-		this.state.context.lineCap = "round"; // rounded end cap
-		this.state.context.strokeStyle = '#ffffff'; // hex color of line
-		this.state.context.moveTo(this.state.x, this.state.y); // from position
+		this.state.canvas.context.beginPath(); // begin the drawing path
+		this.state.canvas.context.lineWidth = 30; // width of line
+		this.state.canvas.context.lineCap = "round"; // rounded end cap
+		this.state.canvas.context.strokeStyle = '#ffffff'; // hex color of line
+		this.state.canvas.context.moveTo(this.state.canvas.x1, this.state.canvas.y1); // from position
 		this.setPosition(e);
-		this.state.context.lineTo(this.state.x, this.state.y); // to position
-		this.state.context.stroke(); // draw it!
-	}
-	
-	setPosition(e) {
-		this.setState({x:e.clientX-this.state.left,y:e.clientY-this.state.top_});
-	}
-
-	clearCanvas(){
-		this.state.context.clearRect(0, 0, 280,280);
-	}
-
-	loadCanvas() {
-		// 1; Pulls image data from the appropriate size we have determined
-		let raw = this.state.context.getImageData(0,0,280,280).data;
-		// 2; Converts typed array to regular array
-		// courtesy https://stackoverflow.com/a/29862266/10571336
-		let data1 = Array.prototype.slice.call(raw);
-		// 3; Converts the image to single-value number per pixel (assumption: r,g,b,a are all EQ)
-		// courtesy https://stackoverflow.com/a/33483070/10571336
-		let data2 = data1.filter(function(val,i,Arr) { return i % 4 == 0; })
-		// 4; Converts 256/0 to 1/0
-		let data3 = data2.map(x => x==0? x : 1);
-		// 5; Takes 10x10 chunks of the corresponding image, adds them up, then decides if compressed result is 1/0
-		let rows = [];
-		let ret = [];
-		while (data3.length>0) { rows.push(data3.splice(0,280)); }
-		while (rows.length>0) {
-			let strip = rows.splice(0,10);
-			let chunks = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-			for (let j=0;j<10;j++) {
-				for (let i=0;i<28;i++) {
-					let seg = strip[j].splice(0,10);
-					let sum = seg.reduce((a,b)=>a+b,0);
-					chunks[i] += sum;			
-				}
-			}
-			chunks = chunks.map(x => x>=50? 1:0);
-			ret = ret.concat(chunks);
-		}	
-		//ret = Uint8ClampedArray.from(ret);
-		ret = Uint8Array.from(ret);
-		return ret;	
-	}
-
-	saveLabel(event){
-		this.state.label = event.target.value;
+		this.state.canvas.context.lineTo(this.state.canvas.x1, this.state.canvas.y1); // to position
+		this.state.canvas.context.stroke(); // draw it!
 	}
 	
 	submitData = () => {
-		if (this.state.label==null || this.state.label==''){
-			alert("Please identify your digit before submitting");
-		} else {
-			const raw = this.loadCanvas();
-			this.setState({data:raw});
-			this.state.data = raw;
-            console.log(this.state.data);
-		}
+		if (this.state.test.label==null || this.state.test.label=='') alert("Please identify your digit before submitting");
+		const temp = loadCanvas(this.state.canvas.context.getImageData(0,0,280,280).data);
+		console.log(temp);
 	}
 
 	render() {
@@ -115,18 +72,24 @@ export default class Canvas extends React.Component {
 			<div className='container elegant-color-dark'>
 				<div className="row">
 					<div className="col text-center">				
-						<canvas id="drawable" width={280} height={280} ref={this.ctx} onMouseMove={this.draw.bind(this)} onMouseDown={this.setPosition.bind(this)} onMouseEnter={this.setPosition.bind(this)}></canvas>
+						<canvas 
+							id="drawable"
+							width={280} height={280} 
+							ref={this.ctx} 
+							onMouseMove={this.draw}
+							onMouseDown={this.setPosition}
+							onMouseEnter={this.setPosition}
+						></canvas>
 					</div>
 				</div>
 				<div className="row">
 					<div className="col text-center">
-						<input type="text" onChange={this.saveLabel.bind(this)} />
-						<button onClick={this.clearCanvas.bind(this)}>Clear</button>
+						<input type="text" onChange={this.saveLabel} />
+						<button onClick={this.clearCanvas}>Clear</button>
 						<button onClick={this.submitData}>Submit</button>
 					</div>
 				</div>
 				<div className="row">
-					<Tensor data={this.state.data} label={this.state.label}/>
 				</div>
 			</div>
 		) 
