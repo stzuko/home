@@ -48,7 +48,7 @@ function Title(props){
 function Image(props){
   return (
           <div className='container img-container'>
-                <img src={'/img/work/' + props.src} alt="related image" className="work-img"/>
+                <img src={'/img/work/' + props.src} alt="screenshot of hosted" className="work-img"/>
           </div>
   )
 }
@@ -62,8 +62,8 @@ function Collapsible(props){
     <div className="container">
       <div className="row">
         <div className="col text-center">
-        	<a href={props.link}><i class="fas fa-link"></i></a>
-		<ul className="text-left">{built}</ul>
+        	<a href={props.link}><i className="fas fa-link"></i></a>
+			<ul className="text-left">{built}</ul>
         </div>
       </div>
     </div>

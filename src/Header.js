@@ -9,7 +9,7 @@ export default class Header extends React.Component {
     		<div className='container elegant-color-dark'>
       			<div className='row'>
         			<Link to='/' className='center-link'>
-          				<img className='rounded-circle' src="sydney.jpg" />
+          				<img className='rounded-circle' src="sydney.jpg" alt="the creator"/>
         			</Link>
       			</div>
       			<div className='row text-center header'>

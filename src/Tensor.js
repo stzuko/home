@@ -1,16 +1,6 @@
 import React from 'react'
 import * as tf from '@tensorflow/tfjs';
 
-// This is a helper class for loading and managing MNIST data specifically.
-// It is a useful example of how you could create your own data manager class
-// for arbitrary data though. It's worth a look :)
-import {IMAGE_H, IMAGE_W, MnistData} from './data';
-
-// This is a helper class for drawing loss graphs and MNIST images to the
-// window. For the purposes of understanding the machine learning bits, you can
-// largely ignore it
-import * as ui from './ui';
-
 export default class Tensor extends React.Component {
 
 	constructor(props) {
@@ -23,43 +13,26 @@ export default class Tensor extends React.Component {
 		}
 	}
 	
-	componentWillMount(){
-		this.state.dataloaded = false;
-		this.loadTrainData().then((res)=>{
-			this.state.data=res
-			this.state.dataloaded = true;
-                	console.log("CWM done");
-		});
-	}
-	
-	async loadTrainData() {
-		let data = new MnistData();
-                await data.load();
-		return data;
-	}
-	
 	componentWillReceiveProps(nextProps){
 		if (nextProps.data==null) return;
 		if (this.state.raw==nextProps.data) return;
-		this.state.raw = nextProps.data
-		this.state.pred = nextProps.label
-		this.runLoader();
+		this.setState({raw:nextProps.data});
+		this.setState({pred:nextProps.label});
+		this.runLoader(nextProps.data,nextProps.label);
 	}
 
-	convertLabel(){
+	convertLabel(pos){
 		let raw = [0,0,0,0,0,0,0,0,0,0];
-		raw[this.state.pred] = 1;
-		console.log(this.state.pred);
-		console.log(raw);
+		raw[pos] = 1;
 		return raw;
 	}
 	
-	runLoader() {
-		let xs = tf.tensor4d(this.state.raw,[1,28,28,1]);
-		let ys = tf.tensor2d(this.convertLabel(),[1,10]);
+	runLoader(data,label) {
+		let xs = tf.tensor4d(data,[1,28,28,1]);
+		let ys = tf.tensor2d(this.convertLabel(label),[1,10]);
 		let test = {xs:xs,ys:ys};
 		let model = this.createModel();
-		this.train(model,test).then(()=>console.log("Train done?"));
+		console.log("done")
 	}
 	
 	createModel(){
@@ -112,90 +85,6 @@ export default class Tensor extends React.Component {
 		model.add(tf.layers.dense({units: 10, activation: 'softmax'}));
 
 		return model;	
-	}
-	
-	async train(model,testdata) {
-		// Now that we've defined our model, we will define our optimizer. The
-		// optimizer will be used to optimize our model's weight values during
-		// training so that we can decrease our training loss and increase our
-		// classification accuracy.
-
-		// The learning rate defines the magnitude by which we update our weights each
-		// training step. The higher the value, the faster our loss values converge,
-		// but also the more likely we are to overshoot optimal parameters
-		// when making an update. A learning rate that is too low will take too long
-		// to find optimal (or good enough) weight parameters while a learning rate
-		// that is too high may overshoot optimal parameters. Learning rate is one of
-		// the most important hyperparameters to set correctly. Finding the right
-		// value takes practice and is often best found empirically by trying many
-		// values.
-		const LEARNING_RATE = 0.01;
-
-		// We are using rmsprop as our optimizer.
-		// An optimizer is an iterative method for minimizing an loss function.
-		// It tries to find the minimum of our loss function with respect to the
-		// model's weight parameters.
-		const optimizer = 'rmsprop';
-		// We compile our model by specifying an optimizer, a loss function, and a
-		// list of metrics that we will use for model evaluation. Here we're using a
-		// categorical crossentropy loss, the standard choice for a multi-class
-		// classification problem like MNIST digits.
-		// The categorical crossentropy loss is differentiable and hence makes
-		// model training possible. But it is not amenable to easy interpretation
-		// by a human. This is why we include a "metric", namely accuracy, which is
-		// simply a measure of how many of the examples are classified correctly.
-		// This metric is not differentiable and hence cannot be used as the loss
-		// function of the model.
-		model.compile({
-		optimizer,
-		loss: 'categoricalCrossentropy',
-		metrics: ['accuracy'],
-		});
-		// Batch size is another important hyperparameter. It defines the number of
-		// examples we group together, or batch, between updates to the model's
-		// weights during training. A value that is too low will update weights using
-		// too few examples and will not generalize well. Larger batch sizes require
-		// more memory resources and aren't guaranteed to perform better.
-		const batchSize = 320;
-
-		// Leave out the last 15% of the training data for validation, to monitor
-		// overfitting during training.
-		const validationSplit = 0.15;
-
-		// Get number of training epochs from the UI.
-		const trainEpochs = 3;
-
-		// We'll keep a buffer of loss and accuracy values over time.
-		let trainBatchCount = 0;
-
-		const trainData = await this.state.data.getTrainData();
-		
-		const totalNumBatches = Math.ceil(trainData.xs.shape[0] * (1 - validationSplit) / batchSize) * trainEpochs;
-		
-		let valAcc;
-		
-		console.log("about to model fit");
-		console.log(trainData.xs);
-		await model.fit(trainData.xs, trainData.labels, {
-			batchSize,
-			validationSplit,
-			epochs: trainEpochs,
-			callbacks: {
-      onBatchEnd: async (batch, logs) => {
-        trainBatchCount++;
-        await tf.nextFrame();
-      },
-      onEpochEnd: async (epoch, logs) => {
-        valAcc = logs.val_acc;
-        await tf.nextFrame();
-      }
-    }
-		});
-		console.log("train done");
-		const testResult = model.evaluate(testdata.xs, testdata.ys);
-		const testAccPercent = testResult[1].dataSync()[0] * 100;
-		const finalValAccPercent = valAcc * 100;
-		console.log(finalValAccPercent);
 	}
 
         render() {

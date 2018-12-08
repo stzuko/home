@@ -12,13 +12,12 @@ export default class Art extends React.Component {
 
 	componentDidMount() {
 		const list = [];
-		for (let i=this.state.art;i>0;i--) {
+		for (let i=this.state.max;i>0;i--) {
 			let link = '/img/art/' + ('0000'+i).slice(-4) + '.jpg';
 			// We declare image and set its source as a kind of quickmount of all images
-			// TODO - insert this into panel? Use React.createElement maybe
 			let img = document.createElement('img');
 			img.src = link;
-			let panel = (<div className="art-wrapper"><a href={link} target="_blank"><img src={link}></img></a></div>);
+			let panel = (<div className="art-wrapper"><a href={link} target="_blank"><img src={link} alt="weird watercolor"></img></a></div>);
 			list.push(panel);
 		}
 		this.setState({carousel:list});

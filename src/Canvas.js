@@ -6,25 +6,34 @@ export default class Canvas extends React.Component {
 	constructor(){
 		super();
 		this.state = {
-			label:null,
-			data:null,
-			context:null,
-			top_:0,
-			left:0,
-			x: 0,
-			y: 0,
+			train:[],
+			test: {
+				raw: null,
+				label: null,
+				tensorx: null,
+				tensory: null,
+			},
+			model:{},
+			canvas:{
+				context: null,
+				x0:null,
+				y0:null,
+				x1:null,
+				y1:null,	
+			},
+			result: {},
 		}
 		this.ctx = React.createRef();
 	}
 
 	componentDidMount() {
-    	this.prepctx();
-		window.addEventListener('resize',this.resizectx);
+	    	this.prepctx();
+		//window.addEventListener('resize',this.resizectx);
  	}
 
 	resizectx = () => {
 		let rect = this.ctx.current.getBoundingClientRect();
-        this.setState({top_:rect.top,left:rect.left});
+        	this.setState({top_:rect.top,left:rect.left});
 	}
 	
 	prepctx = () => {
@@ -90,12 +99,14 @@ export default class Canvas extends React.Component {
 		this.state.label = event.target.value;
 	}
 	
-	submitData() {
+	submitData = () => {
 		if (this.state.label==null || this.state.label==''){
-			alert("Please type the number you've drawn in the input below before submitting");
+			alert("Please identify your digit before submitting");
 		} else {
-			let data = this.loadCanvas();
-			this.setState({data});
+			const raw = this.loadCanvas();
+			this.setState({data:raw});
+			this.state.data = raw;
+            console.log(this.state.data);
 		}
 	}
 
@@ -111,7 +122,7 @@ export default class Canvas extends React.Component {
 					<div className="col text-center">
 						<input type="text" onChange={this.saveLabel.bind(this)} />
 						<button onClick={this.clearCanvas.bind(this)}>Clear</button>
-						<button onClick={this.submitData.bind(this)}>Submit</button>
+						<button onClick={this.submitData}>Submit</button>
 					</div>
 				</div>
 				<div className="row">
