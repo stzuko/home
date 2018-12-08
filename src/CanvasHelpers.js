@@ -1,3 +1,5 @@
+import * as tf from '@tensorflow/tfjs';
+
 export function loadCanvas(raw) {
 	// 1; Converts typed array to regular array
 	// courtesy https://stackoverflow.com/a/29862266/10571336
@@ -32,7 +34,7 @@ export function loadCanvas(raw) {
 export function createConvModel() {
 	const model = tf.sequential();
 	model.add(tf.layers.conv2d({
-		inputShape: [IMAGE_H, IMAGE_W, 1],
+		inputShape: [28, 28, 1],
 		kernelSize: 3,
 		filters: 16,
 		activation: 'relu'

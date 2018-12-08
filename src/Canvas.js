@@ -1,6 +1,6 @@
 import React from 'react'
 import Tensor from './Tensor'
-import { loadCanvas } from './CanvasHelpers'
+import { loadCanvas, createConvModel, runModelTrain } from './CanvasHelpers'
 
 export default class Canvas extends React.Component {
 
@@ -60,6 +60,8 @@ export default class Canvas extends React.Component {
 		if (this.state.test_label==null || this.state.test_label=='') alert("Please identify your digit before submitting");
 		const temp = loadCanvas(this.state.canvas_context.getImageData(0,0,280,280).data);
 		console.log(temp);
+		const model = createConvModel();
+		runModelTrain(model,temp,[0,0,0,0,1,0,0,0,0,0]);
 	}
 
 	render() {
