@@ -1,4 +1,4 @@
-export loadCanvas(raw) {
+export function loadCanvas(raw) {
 	// 1; Converts typed array to regular array
 	// courtesy https://stackoverflow.com/a/29862266/10571336
 	let data1 = Array.prototype.slice.call(raw);
